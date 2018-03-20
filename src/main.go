@@ -7,18 +7,21 @@ import (
 	"strings"
 )
 
-type Config struct {
-	Registry string
-	Image    string
-	Dir      string
-	Username string
-	Password string
-	Tags     []string
-	JobNum   string
-}
+type (
+	Config struct {
+		Registry string
+		Image    string
+		Dir      string
+		Username string
+		Password string
+		Tags     []string
+		JobNum   string
+	}
+)
 
 func main() {
 	fmt.Println("starting deployment")
+	execCommand("env")
 	config := getEnvVars()
 
 	docker := NewDocker(*config)
