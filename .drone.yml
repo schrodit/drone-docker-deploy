@@ -3,6 +3,7 @@ pipeline:
     image: golang:1.9
     commands:
       - cd src && go build -o docker-deploy docker.go main.go
+      - ls
   
   publish:
     image: plugins/docker
