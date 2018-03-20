@@ -21,7 +21,10 @@ type (
 
 func main() {
 	fmt.Println("starting deployment")
-	execCommand("env")
+	err := execCommand("env")
+	if err != nil {
+		fmt.Println(err)
+	}
 	config := getEnvVars()
 
 	docker := NewDocker(*config)
