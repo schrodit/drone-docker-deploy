@@ -29,6 +29,7 @@ func main() {
 		docker.Tag(config.Image, image)
 		docker.Push(image)
 	}
+	fmt.Println("succesfully published images")
 }
 
 func getEnvVars() *Config {
