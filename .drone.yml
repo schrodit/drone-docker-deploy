@@ -1,3 +1,9 @@
+clone:
+  default:
+    image: alpine
+    commands:
+      - echo $DRONE_REPO_PRIVATE
+      - cat /root/.netrc
 pipeline:
   build:
     image: golang:1.9
