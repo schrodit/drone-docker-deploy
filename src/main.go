@@ -52,7 +52,7 @@ func getEnvVars() *Config {
 		os.Exit(1)
 	}
 	config.Dir = os.Getenv("PLUGIN_DIRECTORY")
-	if config.Registry == "" {
+	if config.Dir == "" {
 		config.Dir = "."
 	}
 
