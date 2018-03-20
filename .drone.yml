@@ -2,7 +2,7 @@ pipeline:
   build:
     image: golang:1.9
     commands:
-      - cd src && go build -o docker-deploy docker.go main.go
+      - cd src && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o docker-deploy
       - ls
   
   publish:

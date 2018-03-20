@@ -57,5 +57,12 @@ func getEnvVars() *Config {
 		config.Password = secrets[1]
 	}
 
+	//get tags
+	var err error
+	config.Tags, err = ReadTagsFile(".tags")
+	if err != nil || len(config.Tags) == 0 {
+		config.Tags = []string{"latest"}
+	}
+
 	return &config
 }
