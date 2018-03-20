@@ -1,0 +1,15 @@
+pipeline:
+  build:
+    image: golang:1.9
+    commands:
+      - cd src && go build -o docker-deploy docker.go main.go
+  
+  publish:
+    image: plugins/docker
+    dockerfile: Dockerfile
+    registry: registry.wesense.cloud
+    repo: registry.wesense.cloud/docker-deploy
+    secrets: [ docker_username, docker_password ]
+    tags: [ latest ]
+    when:
+      branch: master
