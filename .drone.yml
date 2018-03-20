@@ -11,6 +11,8 @@ pipeline:
     registry: registry.wesense.cloud
     image: registry.wesense.cloud/docker-deploy
     secrets: [ docker_username, docker_password ]
+    commands:
+      - env
     when:
       branch: master
   
