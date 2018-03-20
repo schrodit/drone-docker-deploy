@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 )
 
 type (
@@ -47,7 +46,7 @@ func getEnvVars() *Config {
 
 	config.Registry = os.Getenv("PLUGIN_REGISTRY")
 
-	config.Image = os.Getenv("PLUGIN_IMAGE")
+	config.Image = os.Getenv("PLUGIN_REPO")
 	if config.Image == "" {
 		log.Fatal("parameter image is required")
 		os.Exit(1)
@@ -57,15 +56,11 @@ func getEnvVars() *Config {
 		config.Dir = "."
 	}
 
-	config.JobNum = os.Getenv("DRONE_JOB_NUMBER")
+	config.JobNum = os.Getenv("DRONE_BUILD_NUMBER")
 
 	//get credentials
-	secret := os.Getenv("PLUGIN_SECRETS")
-	if secret != "" {
-		secrets := strings.Split(secret, ",")
-		config.Username = secrets[0]
-		config.Password = secrets[1]
-	}
+	config.Username = os.Getenv("DOCKER_USERNAME")
+	config.Password = os.Getenv("DOCKER_PASSWORD")
 
 	//get tags
 	var err error
