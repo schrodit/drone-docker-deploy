@@ -21,5 +21,7 @@ pipeline:
     registry: registry.wesense.cloud
     repo: registry.wesense.cloud/docker-deploy
     secrets: [ docker_username, docker_password ]
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
     when:
       branch: master
