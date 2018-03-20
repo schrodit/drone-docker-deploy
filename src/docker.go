@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/exec"
 )
@@ -25,7 +25,7 @@ func NewDocker(c Config) Docker {
 func (d *docker) Login() {
 	_, err := execDocker("login", "-u", d.Username, "-p", d.Password, d.Registry)
 	if err != nil {
-		fmt.Errorf("login failed")
+		log.Fatal("login failed")
 		os.Exit(1)
 	}
 }
@@ -33,7 +33,7 @@ func (d *docker) Login() {
 func (d *docker) Build() {
 	_, err := execDocker("build", "-t", d.Image, d.Dir)
 	if err != nil {
-		fmt.Errorf("failed to build image")
+		log.Fatal("failed to build image")
 		os.Exit(1)
 	}
 }
@@ -41,7 +41,7 @@ func (d *docker) Build() {
 func (d *docker) Push(image string) {
 	_, err := execDocker("push", image)
 	if err != nil {
-		fmt.Errorf("failed to push image: %v", image)
+		log.Fatalf("failed to push image: %v", image)
 		os.Exit(1)
 	}
 }
@@ -49,7 +49,7 @@ func (d *docker) Push(image string) {
 func (d *docker) Tag(source, target string) {
 	_, err := execDocker("tag", source, target)
 	if err != nil {
-		fmt.Errorf("failed to tag image: %v", source)
+		log.Fatalf("failed to tag image: %v", source)
 		os.Exit(1)
 	}
 }

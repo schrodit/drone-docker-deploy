@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -17,6 +18,7 @@ type Config struct {
 }
 
 func main() {
+	fmt.Println("starting deployment")
 	config := getEnvVars()
 
 	docker := NewDocker(*config)
@@ -41,7 +43,7 @@ func getEnvVars() *Config {
 
 	config.Image = os.Getenv("PLUGIN_IMAGE")
 	if config.Image == "" {
-		fmt.Errorf("parameter image is required")
+		log.Fatal("parameter image is required")
 		os.Exit(1)
 	}
 	config.Dir = os.Getenv("PLUGIN_DIRECTORY")
