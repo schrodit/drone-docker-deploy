@@ -20,7 +20,9 @@ func main() {
 	config := getEnvVars()
 
 	docker := NewDocker(*config)
-	docker.Login()
+	if config.Username != "" {
+		docker.Login()
+	}
 	docker.Build()
 
 	for _, tag := range config.Tags {

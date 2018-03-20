@@ -60,5 +60,6 @@ func execDocker(args ...string) ([]byte, error) {
 
 func execCommand(cmd string, args ...string) ([]byte, error) {
 	c := exec.Command(cmd, args...)
+	c.Stdout = os.Stdout
 	return c.Output()
 }
