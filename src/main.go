@@ -6,24 +6,18 @@ import (
 	"os"
 )
 
-type (
-	Config struct {
-		Registry string
-		Image    string
-		Dir      string
-		Username string
-		Password string
-		Tags     []string
-		JobNum   string
-	}
-)
+type Config struct {
+	Registry string
+	Image    string
+	Dir      string
+	Username string
+	Password string
+	Tags     []string
+	JobNum   string
+}
 
 func main() {
 	fmt.Println("starting deployment")
-	err := execCommand("env")
-	if err != nil {
-		fmt.Println(err)
-	}
 	config := getEnvVars()
 
 	docker := NewDocker(*config)
@@ -48,7 +42,7 @@ func getEnvVars() *Config {
 
 	config.Image = os.Getenv("PLUGIN_REPO")
 	if config.Image == "" {
-		log.Fatal("parameter image is required")
+		log.Fatal("parameter 'image' is required")
 		os.Exit(1)
 	}
 	config.Dir = os.Getenv("PLUGIN_DIRECTORY")

@@ -12,6 +12,7 @@ func ReadTagsFile(file string) ([]string, error) {
 	}
 
 	versionsString := string(dat)
+	versionsString = strings.Replace(versionsString, " ", "", -1)
 	versions := strings.Split(versionsString, ",")
 	return versions, nil
 }
