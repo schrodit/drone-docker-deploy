@@ -18,7 +18,7 @@ pipeline:
       - GOARCH=amd64
       - CGO_ENABLED=0
     commands:
-      - cd src && go build -o docker-deploy
+      - go build -o docker-deploy
       - ls
   
   publish:
