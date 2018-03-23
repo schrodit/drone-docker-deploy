@@ -7,13 +7,15 @@ import (
 )
 
 type Config struct {
-	Registry string
-	Image    string
-	Dir      string
-	Username string
-	Password string
-	Tags     []string
-	JobNum   string
+	Registry  string
+	Image     string
+	Dir       string
+	Username  string
+	Password  string
+	Tags      []string
+	JobNum    string
+	UseGitTag bool
+	GitTag    string
 }
 
 func main() {
@@ -27,11 +29,11 @@ func main() {
 	docker.Build()
 
 	for _, tag := range config.Tags {
-		newTag := fmt.Sprintf("%s-%s", tag, config.JobNum)
-		image := fmt.Sprintf("%s:%s", config.Image, newTag)
+		image := fmt.Sprintf("%s:%s", config.Image, tag)
 		docker.Tag(config.Image, image)
 		docker.Push(image)
 	}
+
 	fmt.Println("succesfully published images")
 }
 
@@ -50,6 +52,16 @@ func getEnvVars() *Config {
 		config.Dir = "."
 	}
 
+	if os.Getenv("PLUGIN_USEGITHUBTAG") == "true" {
+		config.UseGitTag = true
+		if config.GitTag = os.Getenv("GIT_TAG"); config.GitTag == "" {
+			log.Fatal("cannot get git tag")
+			os.Exit(1)
+		}
+	} else {
+		config.UseGitTag = false
+	}
+
 	config.JobNum = os.Getenv("DRONE_BUILD_NUMBER")
 
 	//get credentials
@@ -57,11 +69,24 @@ func getEnvVars() *Config {
 	config.Password = os.Getenv("DOCKER_PASSWORD")
 
 	//get tags
-	var err error
-	config.Tags, err = ReadTagsFile(".tags")
-	if err != nil || len(config.Tags) == 0 {
-		config.Tags = []string{"latest"}
-	}
+	config.Tags = GetTags(config)
 
 	return &config
+}
+
+func GetTags(config Config) []string {
+	var tags []string
+	if config.UseGitTag == true {
+		tags = []string{config.GitTag}
+	} else {
+		tags, err := ReadTagsFile(".tags")
+		if err != nil || len(config.Tags) == 0 {
+			tags = []string{"latest"}
+		}
+
+		for i, tag := range tags {
+			tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
+		}
+	}
+	return tags
 }
