@@ -59,9 +59,9 @@ func getEnvVars() *Config {
 		config.Dir = "."
 	}
 
-	if os.Getenv("PLUGIN_USEGITHUBTAG") == "true" {
+	if os.Getenv("PLUGIN_USEGITTAG") == "true" {
 		config.UseGitTag = true
-		config.GitTag = os.Getenv("GIT_TAG")
+		config.GitTag = os.Getenv("DRONE_TAG")
 		if config.GitTag == "" {
 			config.UseGitTag = false
 			log.Println("cannot get git tag, use .tags file")
@@ -88,6 +88,9 @@ func GetTags(config Config) []string {
 		tags = []string{config.GitTag}
 	} else {
 		tags, err := ReadTagsFile(".tags")
+		if err != nil {
+			log.Fatal(err)
+		}
 		if err != nil || len(config.Tags) == 0 {
 			tags = []string{"latest"}
 		}
