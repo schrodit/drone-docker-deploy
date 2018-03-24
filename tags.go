@@ -11,16 +11,22 @@ type Tags interface {
 	ReadTagsFile(string) ([]string, error)
 }
 
-type tags struct{}
+type tags struct {
+	tagsFile string
+}
 
 func NewTags() Tags {
-	return &tags{}
+	return &tags{".tags"}
 }
 
 func (t *tags) ReadTagsFile(file string) ([]string, error) {
 	dat, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(dat) == 0 {
+		return []string{}, nil
 	}
 
 	versionsString := string(dat)
@@ -34,12 +40,11 @@ func (t *tags) GetTags(config Config) []string {
 		return []string{config.GitTag, "latest"}
 	}
 
-	tags, err := t.ReadTagsFile(".tags")
+	tags, err := t.ReadTagsFile(t.tagsFile)
 	if err != nil || len(tags) == 0 {
 		tags = []string{"latest"}
 	}
 	for i, tag := range tags {
-		fmt.Println(tag)
 		tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
 	}
 	return tags
