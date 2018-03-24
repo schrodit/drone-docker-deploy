@@ -7,15 +7,16 @@ import (
 )
 
 type Config struct {
-	Registry  string
-	Image     string
-	Dir       string
-	Username  string
-	Password  string
-	Tags      []string
-	JobNum    string
-	UseGitTag bool
-	GitTag    string
+	Registry   string
+	Image      string
+	Dockerfile string
+	Dir        string
+	Username   string
+	Password   string
+	Tags       []string
+	JobNum     string
+	UseGitTag  bool
+	GitTag     string
 }
 
 func main() {
@@ -47,6 +48,12 @@ func getEnvVars() *Config {
 		log.Fatal("parameter 'image' is required")
 		os.Exit(1)
 	}
+
+	config.Dockerfile = os.Getenv("PLUGIN_DOCKERFILE")
+	if config.Dockerfile == "" {
+		config.Dockerfile = "Dockerfile"
+	}
+
 	config.Dir = os.Getenv("PLUGIN_DIRECTORY")
 	if config.Dir == "" {
 		config.Dir = "."
