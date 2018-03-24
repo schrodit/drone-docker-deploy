@@ -61,9 +61,10 @@ func getEnvVars() *Config {
 
 	if os.Getenv("PLUGIN_USEGITHUBTAG") == "true" {
 		config.UseGitTag = true
-		if config.GitTag = os.Getenv("GIT_TAG"); config.GitTag == "" {
-			log.Fatal("cannot get git tag")
-			os.Exit(1)
+		config.GitTag = os.Getenv("GIT_TAG")
+		if config.GitTag == "" {
+			config.UseGitTag = false
+			log.Println("cannot get git tag, use .tags file")
 		}
 	} else {
 		config.UseGitTag = false

@@ -35,7 +35,9 @@ pipeline:
     pull: true
     repo: schrodit/drone-docker-deploy
     secrets: [ docker_username, docker_password ]
+    usegittag: true
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
     when:
+      event: [push, tag]
       branch: master
