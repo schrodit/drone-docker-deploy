@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 )
 
 type Config struct {
@@ -21,62 +19,21 @@ type Config struct {
 
 func main() {
 	fmt.Println("starting deployment")
-	config := getEnvVars()
-
-	docker := NewDocker(*config)
-	if config.Username != "" {
-		docker.Login()
-	}
-	docker.Build()
-
-	for _, tag := range config.Tags {
-		image := fmt.Sprintf("%s:%s", config.Image, tag)
-		docker.Tag(config.Image, image)
-		docker.Push(image)
-	}
-
+	tags := NewTags()
+	envVars := NewEnvVars(tags)
+	run(envVars)
 	fmt.Println("succesfully published images")
 }
 
-func getEnvVars() *Config {
-	config := Config{}
+func run(e EnvVars) {
+	//create Config out of Environment variables
+	config := e.Get()
+	docker := NewDocker(*config)
+	buildImage(docker)
+}
 
-	config.Registry = os.Getenv("PLUGIN_REGISTRY")
-
-	config.Image = os.Getenv("PLUGIN_REPO")
-	if config.Image == "" {
-		log.Fatal("parameter 'image' is required")
-		os.Exit(1)
-	}
-
-	config.Dockerfile = os.Getenv("PLUGIN_DOCKERFILE")
-	if config.Dockerfile == "" {
-		config.Dockerfile = "Dockerfile"
-	}
-
-	config.Dir = os.Getenv("PLUGIN_DIRECTORY")
-	if config.Dir == "" {
-		config.Dir = "."
-	}
-	if os.Getenv("PLUGIN_USEGITTAG") == "true" {
-		config.UseGitTag = true
-		config.GitTag = os.Getenv("DRONE_TAG")
-		if config.GitTag == "" {
-			config.UseGitTag = false
-			log.Println("cannot get git tag, use .tags file")
-		}
-	} else {
-		config.UseGitTag = false
-	}
-
-	config.JobNum = os.Getenv("DRONE_BUILD_NUMBER")
-
-	//get credentials
-	config.Username = os.Getenv("DOCKER_USERNAME")
-	config.Password = os.Getenv("DOCKER_PASSWORD")
-
-	//get tags
-	config.Tags = GetTags(config)
-
-	return &config
+func buildImage(docker Docker) {
+	docker.Login()
+	docker.Build()
+	docker.PushTags()
 }

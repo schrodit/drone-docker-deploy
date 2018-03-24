@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -11,6 +12,7 @@ type Docker interface {
 	Build()
 	Push(string)
 	Tag(string, string)
+	PushTags()
 }
 
 type docker struct {
@@ -23,10 +25,12 @@ func NewDocker(c Config) Docker {
 }
 
 func (d *docker) Login() {
-	err := execDocker("login", "-u", d.Username, "-p", d.Password, d.Registry)
-	if err != nil {
-		log.Fatal("login failed")
-		os.Exit(1)
+	if d.Config.Username != "" {
+		err := execDocker("login", "-u", d.Username, "-p", d.Password, d.Registry)
+		if err != nil {
+			log.Fatal("login failed")
+			os.Exit(1)
+		}
 	}
 }
 
@@ -51,6 +55,14 @@ func (d *docker) Tag(source, target string) {
 	if err != nil {
 		log.Fatalf("failed to tag image: %v", source)
 		os.Exit(1)
+	}
+}
+
+func (d *docker) PushTags() {
+	for _, tag := range d.Config.Tags {
+		image := fmt.Sprintf("%s:%s", d.Config.Image, tag)
+		d.Tag(d.Config.Image, image)
+		d.Push(image)
 	}
 }
 

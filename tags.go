@@ -6,7 +6,18 @@ import (
 	"strings"
 )
 
-func ReadTagsFile(file string) ([]string, error) {
+type Tags interface {
+	GetTags(Config) []string
+	ReadTagsFile(string) ([]string, error)
+}
+
+type tags struct{}
+
+func NewTags() Tags {
+	return &tags{}
+}
+
+func (t *tags) ReadTagsFile(file string) ([]string, error) {
 	dat, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -18,12 +29,12 @@ func ReadTagsFile(file string) ([]string, error) {
 	return versions, nil
 }
 
-func GetTags(config Config) []string {
+func (t *tags) GetTags(config Config) []string {
 	if config.UseGitTag == true {
 		return []string{config.GitTag, "latest"}
 	}
 
-	tags, err := ReadTagsFile(".tags")
+	tags, err := t.ReadTagsFile(".tags")
 	if err != nil || len(tags) == 0 {
 		tags = []string{"latest"}
 	}
