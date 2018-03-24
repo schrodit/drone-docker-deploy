@@ -80,22 +80,3 @@ func getEnvVars() *Config {
 
 	return &config
 }
-
-func GetTags(config Config) []string {
-	if config.UseGitTag == true {
-		return []string{config.GitTag}
-	}
-
-	tags, err := ReadTagsFile(".tags")
-	fmt.Println(tags)
-	if err != nil || len(config.Tags) == 0 {
-		tags = []string{"latest"}
-	}
-	fmt.Println(tags)
-	for i, tag := range tags {
-		fmt.Println(tag)
-		tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
-	}
-	fmt.Println(tags)
-	return tags
-}
