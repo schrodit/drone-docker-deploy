@@ -20,7 +20,7 @@ func ReadTagsFile(file string) ([]string, error) {
 
 func GetTags(config Config) []string {
 	if config.UseGitTag == true {
-		return []string{config.GitTag}
+		return []string{config.GitTag, "latest"}
 	}
 
 	tags, err := ReadTagsFile(".tags")
