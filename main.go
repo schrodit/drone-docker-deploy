@@ -59,6 +59,7 @@ func getEnvVars() *Config {
 		config.Dir = "."
 	}
 
+	log.Println(os.Getenv("PLUGIN_USEGITTAG"))
 	if os.Getenv("PLUGIN_USEGITTAG") == "true" {
 		config.UseGitTag = true
 		config.GitTag = os.Getenv("DRONE_TAG")
