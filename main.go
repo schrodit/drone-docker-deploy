@@ -89,9 +89,7 @@ func GetTags(config Config) []string {
 		tags = []string{config.GitTag}
 	} else {
 		tags, err := ReadTagsFile(".tags")
-		if err != nil {
-			log.Fatal(err)
-		}
+		log.Println(tags)
 		if err != nil || len(config.Tags) == 0 {
 			tags = []string{"latest"}
 		}
