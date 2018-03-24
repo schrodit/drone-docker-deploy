@@ -31,7 +31,7 @@ func (d *docker) Login() {
 }
 
 func (d *docker) Build() {
-	err := execDocker("build", "-t", d.Image, d.Dir)
+	err := execDocker("build", "-t", d.Image, "-f", d.Dockerfile, d.Dir)
 	if err != nil {
 		log.Fatalf("failed to build image %s in directory %s", d.Image, d.Dir)
 		os.Exit(1)
