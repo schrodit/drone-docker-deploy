@@ -82,19 +82,19 @@ func getEnvVars() *Config {
 }
 
 func GetTags(config Config) []string {
-	var tags []string
 	if config.UseGitTag == true {
-		tags = []string{config.GitTag}
-	} else {
-		tags, err := ReadTagsFile(".tags")
-		if err != nil || len(config.Tags) == 0 {
-			tags = []string{"latest"}
-		}
+		return []string{config.GitTag}
+	}
 
-		for i, tag := range tags {
-			fmt.Println(tag)
-			tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
-		}
+	tags, err := ReadTagsFile(".tags")
+	fmt.Println(tags)
+	if err != nil || len(config.Tags) == 0 {
+		tags = []string{"latest"}
+	}
+	fmt.Println(tags)
+	for i, tag := range tags {
+		fmt.Println(tag)
+		tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
 	}
 	fmt.Println(tags)
 	return tags
