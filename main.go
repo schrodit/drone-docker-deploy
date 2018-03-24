@@ -58,8 +58,6 @@ func getEnvVars() *Config {
 	if config.Dir == "" {
 		config.Dir = "."
 	}
-
-	log.Println(os.Getenv("PLUGIN_USEGITTAG"))
 	if os.Getenv("PLUGIN_USEGITTAG") == "true" {
 		config.UseGitTag = true
 		config.GitTag = os.Getenv("DRONE_TAG")
@@ -89,14 +87,15 @@ func GetTags(config Config) []string {
 		tags = []string{config.GitTag}
 	} else {
 		tags, err := ReadTagsFile(".tags")
-		fmt.Println(tags)
 		if err != nil || len(config.Tags) == 0 {
 			tags = []string{"latest"}
 		}
 
 		for i, tag := range tags {
+			fmt.Println(tag)
 			tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
 		}
 	}
+	fmt.Println(tags)
 	return tags
 }
