@@ -45,7 +45,9 @@ func (t *tags) GetTags(config Config) []string {
 		tags = []string{"latest"}
 	}
 	for i, tag := range tags {
-		tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
+		if tag != "latest" {
+			tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
+		}
 	}
 	return tags
 }

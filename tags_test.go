@@ -76,7 +76,7 @@ func Test_tags_GetTags(t *testing.T) {
 				UseGitTag: false,
 				JobNum:    "1",
 			}},
-			[]string{"latest-1"},
+			[]string{"latest"},
 		},
 		{
 			"should return 2 tags with jobnumber 1",
@@ -85,7 +85,7 @@ func Test_tags_GetTags(t *testing.T) {
 				UseGitTag: false,
 				JobNum:    "1",
 			}},
-			[]string{"0.0.0-1", "latest-1"},
+			[]string{"0.0.0-1", "latest"},
 		},
 		{
 			"should return 2 tags with jobnumber 2",
@@ -94,7 +94,7 @@ func Test_tags_GetTags(t *testing.T) {
 				UseGitTag: false,
 				JobNum:    "2",
 			}},
-			[]string{"0.0.0-2", "latest-2"},
+			[]string{"0.0.0-2", "latest"},
 		},
 		{
 			"should return 1 tags with jobnumber 1",
