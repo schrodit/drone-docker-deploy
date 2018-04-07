@@ -25,7 +25,6 @@ pipeline:
     commands:
       - go build -o docker-deploy
       - ls
-      - git fetch
   
   # publish:
   #   image: plugins/docker
