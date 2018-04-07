@@ -69,7 +69,13 @@ func (t *tags) AddJobNumber(tags []string, config Config) []string {
 }
 
 func (t *tags) GetNewestGitTag() string {
-	cmd := exec.Command("git", "describe", "--tags", "--abbrev=0")
+	cmd := exec.Command("git", "fetch")
+	if err := cmd.Run(); err != nil {
+		log.Printf("cannot fetch tags\n%v", err)
+		return ""
+	}
+
+	cmd = exec.Command("git", "describe", "--tags", "--abbrev=0")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 

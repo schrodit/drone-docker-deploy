@@ -15,7 +15,6 @@ pipeline:
     image: golang:1.9
     commands:
       - go test -cover
-      - git describe --tags
 
   build:
     image: golang:1.9
@@ -26,6 +25,7 @@ pipeline:
     commands:
       - go build -o docker-deploy
       - ls
+      - git fetch
   
   # publish:
   #   image: plugins/docker
