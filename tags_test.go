@@ -106,20 +106,42 @@ func Test_tags_GetTags(t *testing.T) {
 			[]string{"0.0.0-1"},
 		},
 		{
-			"should return 'gitTag' with jobnumber and 'latest' without jobnumber",
+			"should return 1 tag with jobnumber 1 and latest tag",
+			&tags{"testdata/tagsData2"},
+			struct{ config Config }{Config{
+				UseGitTag: false,
+				Latest:    true,
+				JobNum:    "1",
+			}},
+			[]string{"0.0.0-1", "latest"},
+		},
+		{
+			"should return 'gitTag' with jobnumber and no 'latest'-tag",
 			&tags{"testdata/tagsData1"},
 			struct{ config Config }{Config{
 				UseGitTag: true,
 				GitTag:    "1.1.1",
 				JobNum:    "1",
 			}},
-			[]string{"1.1.1-1", "latest"},
+			[]string{"1.1.1-1"},
 		},
 		{
 			"should return 'gitTag' and 'latest' without jobnumber",
 			&tags{"testdata/tagsData1"},
 			struct{ config Config }{Config{
 				UseGitTag:  true,
+				BuildEvent: "tag",
+				GitTag:     "1.1.1",
+				JobNum:     "1",
+			}},
+			[]string{"1.1.1", "latest"},
+		},
+		{
+			"should return 'gitTag' with jobnumber and 'latest' without jobnumber",
+			&tags{"testdata/tagsData1"},
+			struct{ config Config }{Config{
+				UseGitTag:  true,
+				Latest:     true,
 				BuildEvent: "tag",
 				GitTag:     "1.1.1",
 				JobNum:     "1",

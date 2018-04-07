@@ -39,6 +39,12 @@ func (e *envVars) Get() *Config {
 	}
 	config.BuildEvent = os.Getenv("DRONE_BUILD_EVENT")
 
+	if os.Getenv("PLUGIN_LATEST") == "true" {
+		config.Latest = true
+	} else {
+		config.Latest = false
+	}
+
 	if os.Getenv("PLUGIN_USEGITTAG") == "true" {
 		config.UseGitTag = true
 		config.GitTag = os.Getenv("DRONE_TAG")

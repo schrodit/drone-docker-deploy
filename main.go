@@ -13,6 +13,7 @@ type Config struct {
 	Password   string
 	Tags       []string
 	JobNum     string
+	Latest     bool
 	UseGitTag  bool
 	BuildEvent string
 	GitTag     string

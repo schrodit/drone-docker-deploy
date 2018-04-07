@@ -52,10 +52,12 @@ func (t *tags) GetTags(config Config) []string {
 		}
 	}
 
+	if config.BuildEvent == "tag" || config.Latest {
+		tags = append(tags, "latest")
+	}
+
 	if config.BuildEvent != "tag" {
 		tags = t.AddJobNumber(tags, config)
-	} else {
-		tags = append(tags, "latest")
 	}
 
 	return tags
