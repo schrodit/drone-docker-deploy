@@ -43,7 +43,7 @@ func (t *tags) ReadTagsFile(file string) ([]string, error) {
 func (t *tags) GetTags(config Config) []string {
 	var tags []string
 	if config.UseGitTag == true {
-		tags = []string{config.GitTag, "latest"}
+		tags = []string{config.GitTag}
 	} else {
 		var err error
 		tags, err = t.ReadTagsFile(t.tagsFile)
@@ -54,6 +54,8 @@ func (t *tags) GetTags(config Config) []string {
 
 	if config.BuildEvent != "tag" {
 		tags = t.AddJobNumber(tags, config)
+	} else {
+		tags = append(tags, "latest")
 	}
 
 	return tags
