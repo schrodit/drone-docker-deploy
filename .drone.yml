@@ -15,6 +15,7 @@ pipeline:
     image: golang:1.9
     commands:
       - go test -cover
+      - git describe --tags
 
   build:
     image: golang:1.9

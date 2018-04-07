@@ -74,7 +74,7 @@ func (t *tags) GetNewestGitTag() string {
 	cmd.Stdout = &out
 
 	if err := cmd.Run(); err != nil {
-		log.Fatalf("cannot get latest tag\n%v", err)
+		log.Printf("cannot get latest tag\n%v", err)
 		return ""
 	}
 
