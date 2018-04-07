@@ -6,7 +6,10 @@ drone ci plugin for faster docker deployment and automated versioning
 
 ## Documentation
 
-| Name       | Description                                                                                                                           | Optional |
+The plugin uses tags presented in the .tags file where the tags are comma seperated.
+The build number is added to every build version that isn't a tag event (Format: "Version-JobNumber").
+
+| Parameter name       | Description                                                                                                                           | Optional |
 | ---------- | :------------------------------------------------------------------------------------------------------------------------------------ | :------: |
 | repo       | Name of the docker image                                                                                                              |          |
 | registry   | Name of a private registry                                                                                                            |    x     |
@@ -14,6 +17,9 @@ drone ci plugin for faster docker deployment and automated versioning
 | directory  | Use a different work directory. Default: ./                                                                                           |    x     |
 | usegittag  | Uses the latest git tag or the current git tag if present.<br /> If the current build is a tag event also the "latest"-tag is pushed. |    x     |
 | latest     | Do also push "latest"-tag in every build.                                                                                             |    x     |
+
+### Note:
+* Plugin has to run in privileged/trusted mode
 
 ## Example
 
