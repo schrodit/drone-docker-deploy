@@ -1,14 +1,19 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os/exec"
 	"strings"
 )
 
 type Tags interface {
 	GetTags(Config) []string
 	ReadTagsFile(string) ([]string, error)
+	GetNewestGitTag() string
+	AddJobNumber([]string, Config) []string
 }
 
 type tags struct {
@@ -36,18 +41,42 @@ func (t *tags) ReadTagsFile(file string) ([]string, error) {
 }
 
 func (t *tags) GetTags(config Config) []string {
+	var tags []string
 	if config.UseGitTag == true {
-		return []string{config.GitTag, "latest"}
+		tags = []string{config.GitTag, "latest"}
+	} else {
+		var err error
+		tags, err = t.ReadTagsFile(t.tagsFile)
+		if err != nil || len(tags) == 0 {
+			tags = []string{"latest"}
+		}
 	}
 
-	tags, err := t.ReadTagsFile(t.tagsFile)
-	if err != nil || len(tags) == 0 {
-		tags = []string{"latest"}
+	if config.BuildEvent != "tag" {
+		tags = t.AddJobNumber(tags, config)
 	}
+
+	return tags
+}
+
+func (t *tags) AddJobNumber(tags []string, config Config) []string {
 	for i, tag := range tags {
 		if tag != "latest" {
 			tags[i] = fmt.Sprintf("%s-%s", tag, config.JobNum)
 		}
 	}
 	return tags
+}
+
+func (t *tags) GetNewestGitTag() string {
+	cmd := exec.Command("git", "describe", "--tags", "--abbrev=0")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("cannot get latest tag\n%v", err)
+		return ""
+	}
+
+	return out.String()
 }

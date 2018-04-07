@@ -14,6 +14,7 @@ type Config struct {
 	Tags       []string
 	JobNum     string
 	UseGitTag  bool
+	BuildEvent string
 	GitTag     string
 }
 

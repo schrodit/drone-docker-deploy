@@ -70,7 +70,7 @@ func Test_tags_GetTags(t *testing.T) {
 		want []string
 	}{
 		{
-			"should return 1 tag with jobnumber 1",
+			"should return 'latest' tag without jobnumber 1",
 			&tags{"testdata/tagsData0"},
 			struct{ config Config }{Config{
 				UseGitTag: false,
@@ -97,7 +97,7 @@ func Test_tags_GetTags(t *testing.T) {
 			[]string{"0.0.0-2", "latest"},
 		},
 		{
-			"should return 1 tags with jobnumber 1",
+			"should return 1 tag with jobnumber 1",
 			&tags{"testdata/tagsData2"},
 			struct{ config Config }{Config{
 				UseGitTag: false,
@@ -106,12 +106,23 @@ func Test_tags_GetTags(t *testing.T) {
 			[]string{"0.0.0-1"},
 		},
 		{
-			"should return 'gitTag' and 'latest' without jobnumber",
+			"should return 'gitTag' with jobnumber and 'latest' without jobnumber",
 			&tags{"testdata/tagsData1"},
 			struct{ config Config }{Config{
 				UseGitTag: true,
 				GitTag:    "1.1.1",
 				JobNum:    "1",
+			}},
+			[]string{"1.1.1-1", "latest"},
+		},
+		{
+			"should return 'gitTag' and 'latest' without jobnumber",
+			&tags{"testdata/tagsData1"},
+			struct{ config Config }{Config{
+				UseGitTag:  true,
+				BuildEvent: "tag",
+				GitTag:     "1.1.1",
+				JobNum:     "1",
 			}},
 			[]string{"1.1.1", "latest"},
 		},
@@ -139,6 +150,45 @@ func TestNewTags(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := NewTags(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewTags() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_tags_AddJobNumber(t *testing.T) {
+	type args struct {
+		tags   []string
+		config Config
+	}
+	tests := []struct {
+		name string
+		t    *tags
+		args args
+		want []string
+	}{
+		{
+			"should add 2 at the end of each tag",
+			&tags{},
+			args{
+				[]string{"1.0.0", "0.0.0"},
+				Config{JobNum: "2"},
+			},
+			[]string{"1.0.0-2", "0.0.0-2"},
+		},
+		{
+			"should add 2 at the end of each tag except of latest",
+			&tags{},
+			args{
+				[]string{"1.0.0", "latest"},
+				Config{JobNum: "2"},
+			},
+			[]string{"1.0.0-2", "latest"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.t.AddJobNumber(tt.args.tags, tt.args.config); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("tags.AddJobNumber() = %v, want %v", got, tt.want)
 			}
 		})
 	}

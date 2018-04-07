@@ -37,12 +37,17 @@ func (e *envVars) Get() *Config {
 	if config.Dir == "" {
 		config.Dir = "."
 	}
+	config.BuildEvent = os.Getenv("DRONE_BUILD_EVENT")
+
 	if os.Getenv("PLUGIN_USEGITTAG") == "true" {
 		config.UseGitTag = true
 		config.GitTag = os.Getenv("DRONE_TAG")
 		if config.GitTag == "" {
-			config.UseGitTag = false
-			log.Println("cannot get git tag, use .tags file")
+			config.GitTag = e.tags.GetNewestGitTag()
+			if config.GitTag == "" {
+				config.UseGitTag = false
+				log.Println("cannot get git tag, use .tags file")
+			}
 		}
 	} else {
 		config.UseGitTag = false
