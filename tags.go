@@ -78,5 +78,7 @@ func (t *tags) GetNewestGitTag() string {
 		return ""
 	}
 
-	return out.String()
+	tag := strings.Replace(out.String(), "\n", "", -1)
+
+	return tag
 }
