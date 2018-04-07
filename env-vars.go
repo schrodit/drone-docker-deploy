@@ -39,6 +39,12 @@ func (e *envVars) Get() *Config {
 	}
 	config.BuildEvent = os.Getenv("DRONE_BUILD_EVENT")
 
+	if os.Getenv("PLUGIN_ADDJOBNUMBER") == "true" {
+		config.AddJobNumber = true
+	} else {
+		config.AddJobNumber = false
+	}
+
 	if os.Getenv("PLUGIN_LATEST") == "true" {
 		config.Latest = true
 	} else {

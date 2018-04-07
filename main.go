@@ -5,18 +5,19 @@ import (
 )
 
 type Config struct {
-	Registry   string
-	Image      string
-	Dockerfile string
-	Dir        string
-	Username   string
-	Password   string
-	Tags       []string
-	JobNum     string
-	Latest     bool
-	UseGitTag  bool
-	BuildEvent string
-	GitTag     string
+	Registry     string
+	Image        string
+	Dockerfile   string
+	Dir          string
+	Username     string
+	Password     string
+	Tags         []string
+	AddJobNumber bool
+	JobNum       string
+	Latest       bool
+	UseGitTag    bool
+	BuildEvent   string
+	GitTag       string
 }
 
 func main() {
