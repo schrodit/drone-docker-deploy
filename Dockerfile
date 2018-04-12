@@ -3,4 +3,5 @@ RUN apk update && apk upgrade && \
     apk add --no-cache git openssh
 ADD docker-deploy /bin/
 ADD Netrc.sh /setup/
+RUN chmod +x /setup/Netrc.sh
 ENTRYPOINT /bin/docker-deploy
