@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os/exec"
 )
 
 type Config struct {
@@ -26,6 +28,15 @@ func main() {
 	envVars := NewEnvVars(tags)
 	run(envVars)
 	fmt.Println("succesfully published images")
+}
+
+func setupNetrc() {
+	cmd := exec.Command("/setup/Netrc.sh")
+	if err := cmd.Run(); err != nil {
+		log.Printf("cannot setup netrc\n%v", err)
+		return
+	}
+	log.Println("succesfully setup .netrc file")
 }
 
 func run(e EnvVars) {
