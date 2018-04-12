@@ -24,6 +24,7 @@ type Config struct {
 
 func main() {
 	fmt.Println("starting deployment")
+	setupNetrc()
 	tags := NewTags()
 	envVars := NewEnvVars(tags)
 	run(envVars)
