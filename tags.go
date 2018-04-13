@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -74,6 +75,7 @@ func (t *tags) AddJobNumber(tags []string, config Config) []string {
 
 func (t *tags) GetNewestGitTag() string {
 	cmd := exec.Command("git", "fetch")
+	cmd.Stdout = os.Stdout
 	if err := cmd.Run(); err != nil {
 		log.Printf("cannot fetch tags\n%v", err)
 		return ""
