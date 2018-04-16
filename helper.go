@@ -33,3 +33,19 @@ func writeNetrc(machine, login, password string) error {
 	path := filepath.Join(home, ".netrc")
 	return ioutil.WriteFile(path, []byte(out), 0600)
 }
+
+// func debugGit() {
+// 	cmd := exec.Command("env")
+// 	cmd.Stdout = os.Stdout
+// 	cmd.Stderr = os.Stderr
+// 	if err := cmd.Run(); err != nil {
+// 		log.Printf("error in debug\n%v", err)
+// 	}
+
+// 	cmd = exec.Command("cat", "/root/.netrc")
+// 	cmd.Stdout = os.Stdout
+// 	cmd.Stderr = os.Stderr
+// 	if err := cmd.Run(); err != nil {
+// 		log.Printf("error in debug\n%v", err)
+// 	}
+// }

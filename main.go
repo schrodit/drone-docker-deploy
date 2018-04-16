@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"os/exec"
 )
 
 type Config struct {
@@ -31,26 +28,9 @@ func main() {
 	fmt.Println("succesfully published images")
 }
 
-func debugGit() {
-	cmd := exec.Command("env")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		log.Printf("error in debug\n%v", err)
-	}
-
-	cmd = exec.Command("cat", "/root/.netrc")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		log.Printf("error in debug\n%v", err)
-	}
-}
-
 func run(e EnvVars) {
 	//create Config out of Environment variables
 	config := e.Get()
-	debugGit()
 	docker := NewDocker(*config)
 	buildImage(docker)
 }
