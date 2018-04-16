@@ -25,7 +25,6 @@ type Config struct {
 
 func main() {
 	fmt.Println("starting deployment")
-	debugGit()
 	tags := NewTags()
 	envVars := NewEnvVars(tags)
 	run(envVars)
@@ -51,6 +50,7 @@ func debugGit() {
 func run(e EnvVars) {
 	//create Config out of Environment variables
 	config := e.Get()
+	debugGit()
 	docker := NewDocker(*config)
 	buildImage(docker)
 }

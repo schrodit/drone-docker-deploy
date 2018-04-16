@@ -44,7 +44,6 @@ func (t *tags) ReadTagsFile(file string) ([]string, error) {
 func (t *tags) GetTags(config Config) []string {
 	var tags []string
 	if config.UseGitTag == true {
-		setupGit()
 		tags = []string{config.GitTag}
 	} else {
 		var err error
@@ -75,6 +74,8 @@ func (t *tags) AddJobNumber(tags []string, config Config) []string {
 }
 
 func (t *tags) GetNewestGitTag() string {
+	setupGit()
+
 	cmd := exec.Command("git", "fetch")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
