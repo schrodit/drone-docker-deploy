@@ -95,12 +95,3 @@ func (t *tags) GetNewestGitTag() string {
 
 	return tag
 }
-
-func debugGit() {
-	cmd := exec.Command("git", "config", "-l")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		log.Printf("error in debug\n%v", err)
-	}
-}
