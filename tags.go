@@ -44,6 +44,7 @@ func (t *tags) ReadTagsFile(file string) ([]string, error) {
 func (t *tags) GetTags(config Config) []string {
 	var tags []string
 	if config.UseGitTag == true {
+		setupGit()
 		tags = []string{config.GitTag}
 	} else {
 		var err error
@@ -94,4 +95,13 @@ func (t *tags) GetNewestGitTag() string {
 	tag := strings.Replace(out.String(), "\n", "", -1)
 
 	return tag
+}
+
+func setupGit() {
+	machine := os.Getenv("DRONE_NETRC_MACHINE")
+	username := os.Getenv("DRONE_NETRC_USERNAME")
+	password := os.Getenv("DRONE_NETRC_PASSWORD")
+	if err := writeNetrc(machine, username, password); err != nil {
+		log.Printf("Error writing .netrc file\n%v", err)
+	}
 }
