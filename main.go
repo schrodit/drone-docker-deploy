@@ -33,7 +33,7 @@ func main() {
 }
 
 func debugGit() {
-	cmd := exec.Command("git", "config", "-l")
+	cmd := exec.Command("env")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
