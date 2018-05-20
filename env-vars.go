@@ -29,9 +29,6 @@ func (e *envVars) Get() *Config {
 	}
 
 	config.Dockerfile = os.Getenv("PLUGIN_DOCKERFILE")
-	if config.Dockerfile == "" {
-		config.Dockerfile = "Dockerfile"
-	}
 
 	config.Dir = os.Getenv("PLUGIN_DIRECTORY")
 	if config.Dir == "" {
