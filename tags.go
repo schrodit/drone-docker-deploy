@@ -96,7 +96,7 @@ func (t *tags) GetNewestGitTag() string {
 		log.Printf("cannot get latest tag\n%v", err)
 		return ""
 	}
-
+	log.Print(out.String())
 	tag := strings.Replace(out.String(), "\n", "", -1)
 
 	return tag
