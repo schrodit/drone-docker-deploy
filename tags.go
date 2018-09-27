@@ -76,19 +76,15 @@ func (t *tags) AddJobNumber(tags []string, config Config) []string {
 func (t *tags) GetNewestGitTag() string {
 	setupGit()
 
-	// cmd := exec.Command("git", "fetch")
-	// cmd.Stdout = os.Stdout
-	// cmd.Stderr = os.Stderr
-	// if err := cmd.Run(); err != nil {
-	// 	log.Printf("cannot fetch tags\n%v", err)
-	// 	return ""
-	// }
+	cmd := exec.Command("git", "fetch")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		log.Printf("cannot fetch tags\n%v", err)
+		return ""
+	}
 
-	// git ls-remote --tags | grep -v "{}" | sort -t '/' -k 3 -V | tail -n 1 | grep -o 'refs/tags/.*' | cut -c11-
-	// cmd = exec.Command("git", "ls-remote", "--tags", "|", "sort", "-t", "'/'", "-k", "3", "-V", "|",
-	// 	"tail", "-n", "1", "|", "grep", "-o", "'refs/tags/.*'", "|", "cut", "-c11-")
-	s := `git ls-remote --tags | grep -v "{}" | sort -t '/' -k 3 -V | tail -n 1 | grep -o 'refs/tags/.*' | cut -c11-`
-	cmd := exec.Command("sh", "-c", s)
+	cmd = exec.Command("git", "describe", "--tags", "--abbrev=0")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 
@@ -96,7 +92,6 @@ func (t *tags) GetNewestGitTag() string {
 		log.Printf("cannot get latest tag\n%v", err)
 		return ""
 	}
-	log.Print(out.String())
 	tag := strings.Replace(out.String(), "\n", "", -1)
 
 	return tag
