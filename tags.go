@@ -84,7 +84,9 @@ func (t *tags) GetNewestGitTag() string {
 		return ""
 	}
 
-	cmd = exec.Command("git", "describe", "--tags", "--abbrev=0")
+	// git ls-remote --tags | grep -v "{}" | sort -t '/' -k 3 -V | tail -n 1 | grep -o 'refs/tags/.*' | cut -c11-
+	cmd = exec.Command("git", "ls-remote", "--tags", "|", "sort", "-t", "'/'", "-k", "3", "-V", "|",
+		"tail", "-n", "1", "|", "grep", "-o", "'refs/tags/.*'", "|", "cut", "-c11-")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 
