@@ -21,7 +21,6 @@ func (e *envVars) Get() *Config {
 	config := Config{}
 
 	config.Registry = os.Getenv("PLUGIN_REGISTRY")
-
 	config.Image = os.Getenv("PLUGIN_REPO")
 	if config.Image == "" {
 		log.Fatal("parameter 'image' is required")
@@ -29,12 +28,9 @@ func (e *envVars) Get() *Config {
 	}
 
 	config.Dockerfile = os.Getenv("PLUGIN_DOCKERFILE")
-
-	config.Dir = os.Getenv("PLUGIN_DIRECTORY")
-	if config.Dir == "" {
-		config.Dir = "."
-	}
-	config.BuildEvent = os.Getenv("DRONE_BUILD_EVENT")
+	config.Dir = GetEnv("PLUGIN_DIRECTORY", ".")
+	config.ImageTagsFile = GetEnv("PLUGIN_IMAGETAGSFILE", ".image_tags")
+	config.BuildEvent = GetEnv("DRONE_BUILD_EVENT", "")
 
 	if os.Getenv("PLUGIN_ADDJOBNUMBER") == "true" {
 		config.AddJobNumber = true
@@ -72,4 +68,12 @@ func (e *envVars) Get() *Config {
 	config.Tags = e.tags.GetTags(config)
 
 	return &config
+}
+
+func GetEnv(envName, defaultValue string) string {
+	env := os.Getenv(envName)
+	if env == "" {
+		env = defaultValue
+	}
+	return env
 }

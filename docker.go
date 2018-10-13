@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type Docker interface {
@@ -13,6 +15,7 @@ type Docker interface {
 	Push(string)
 	Tag(string, string)
 	PushTags()
+	WriteTags()
 }
 
 type docker struct {
@@ -68,6 +71,14 @@ func (d *docker) PushTags() {
 		image := fmt.Sprintf("%s:%s", d.Config.Image, tag)
 		d.Tag(d.Config.Image, image)
 		d.Push(image)
+	}
+}
+
+func (d *docker) WriteTags() {
+	tags := strings.Join(d.Config.Tags, ",")
+	err := ioutil.WriteFile(d.Config.ImageTagsFile, []byte(tags), 0644)
+	if err != nil {
+		log.Fatalf("Cannot log pushed image-tags to file %v \n %v", d.Config.ImageTagsFile, err)
 	}
 }
 
