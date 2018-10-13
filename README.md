@@ -15,6 +15,7 @@ The build number is added to every build version that isn't a tag event (Format:
 | registry       | Name of a private registry                                                                                                            |    x     |
 | dockerfile     | Path to a different Dockerfile. Default: ./Dockerfile                                                                                 |    x     |
 | directory      | Use a different work directory. Default: ./                                                                                           |    x     |
+| imagetagsfile      | Use a different output file for pushed tags. Default: .image_tags                                                                                           |    x     |
 | usegittag      | Uses the latest git tag or the current git tag if present.<br /> If the current build is a tag event also the "latest"-tag is pushed. |    x     |
 | latest         | Do also push "latest"-tag in every build.                                                                                             |    x     |
 | addjobnumber   | Add the builds job number with the format "Version-JobNumber" to pushed tags                                                          |    x     |
